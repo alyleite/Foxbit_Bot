@@ -6,8 +6,8 @@ const Path = require('path');
 const Inert = require('inert');
 const pjson = require('./package.json');
 const config = require('./config.json');
-const Routes = require('./routes')
-const variables = require('./variables')
+const Routes = require('./routes');
+const variables = require('./variables');
 
 
 //clear console
@@ -211,26 +211,29 @@ function onOrderBookDeleteOrder(data) {
   //console.log("onOrderBookDeleteOrder",data)
   logConsole("[" + dateFormat(new Date(), "h:MM:ss") + '] OB:DELETE_ORDER:'+data.side+":"+data.index);
   if (data.side == 'buy') {
-    delete variables.orderbooktemp.bids[data.index-1]; 
+    //delete variables.orderbooktemp.bids[data.index-1]; 
     var todelete = [];
-    for (i = 0 ; i < variables.orderbooktemp.bids.length ;i++)
-    {
-     if (typeof variables.orderbooktemp.bids[i] == 'undefined') todelete.push(i);
+    if(parseInt(variables.orderbooktemp.bids.length) > 0){
+      for (var i = 0; i<parseInt(variables.orderbooktemp.bids.length); i++)
+      {
+        if (typeof variables.orderbooktemp.bids[i] == 'undefined') todelete.push(i);
+      }
     }
     todelete.sort(function(a, b) { return b-a });
-    for (i = 0;i < todelete.length; i ++)
+    for (var i = 0;i < todelete.length; i ++)
     {
     variables.orderbooktemp.bids.splice(todelete[i],1);
     } 
+   
   } else {
     delete variables.orderbooktemp.asks[data.index-1];
     var todelete = [];
-    for (i = 0 ; i < variables.orderbooktemp.asks.length ;i++)
+    for (var i = 0; i < variables.orderbooktemp.asks.length; i++)
     {
       if (typeof variables.orderbooktemp.asks[i] == 'undefined') todelete.push(i);
     }
     todelete.sort(function(a, b) { return b-a });
-    for (i = 0;i < todelete.length; i ++)
+    for (var i = 0; i < todelete.length; i ++)
     {
       variables.orderbooktemp.asks.splice(todelete[i],1);
     }
@@ -241,35 +244,35 @@ function onOrderBookDeleteThruOrder(data) {
 
   logConsole("[" + dateFormat(new Date(), "h:MM:ss") + '] OB:DELETE_ORDERS_THRU');
   if (data.side == 'buy') {
-    for (i = 0 ; i < data.index ;i++)
+    for (var i = 0; i < data.index ;i++)
     {
       delete variables.orderbooktemp.bids[i]; 
     }  
 
 
     var todelete = [];
-    for (i = 0 ; i < variables.orderbooktemp.bids.length ;i++)
+    for (var i = 0; i < variables.orderbooktemp.bids.length; i++)
     {
      if (typeof variables.orderbooktemp.bids[i] == 'undefined') todelete.push(i);
     }
     todelete.sort(function(a, b) { return b-a });
-    for (i = 0;i < todelete.length; i ++)
+    for (var i = 0;i < todelete.length; i ++)
     {
      variables.orderbooktemp.bids.splice(todelete[i],1);
     } 
   } else {
-    for (i = 0 ; i < data.index ;i++)
+    for (var i = 0; i < data.index ;i++)
     {
       delete variables.orderbooktemp.asks[i]; 
     }
 
     var todelete = [];
-    for (i = 0 ; i < variables.orderbooktemp.asks.length ;i++)
+    for (var i = 0; i < variables.orderbooktemp.asks.length ;i++)
     {
       if (typeof variables.orderbooktemp.asks[i] == 'undefined') todelete.push(i);
     }
     todelete.sort(function(a, b) { return b-a });
-    for (i = 0;i < todelete.length; i ++)
+    for (var i = 0;i < todelete.length; i ++)
     {
       variables.orderbooktemp.asks.splice(todelete[i],1);
     }
