@@ -211,7 +211,7 @@ function onOrderBookDeleteOrder(data) {
   //console.log("onOrderBookDeleteOrder",data)
   logConsole("[" + dateFormat(new Date(), "h:MM:ss") + '] OB:DELETE_ORDER:'+data.side+":"+data.index);
   if (data.side == 'buy') {
-    //delete variables.orderbooktemp.bids[data.index-1]; 
+    delete variables.orderbooktemp.bids[data.index-1]; 
     var todelete = [];
     if(parseInt(variables.orderbooktemp.bids.length) > 0){
       for (var i = 0; i<parseInt(variables.orderbooktemp.bids.length); i++)
