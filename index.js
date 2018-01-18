@@ -17,6 +17,8 @@ console.log("Description:", pjson.description);
 console.log("Version:", pjson.version);
 console.log("*******************************************************");
 
+var logged = false;
+
 function serverstart() {
   var server = new Hapi.Server();
   server.connection({ port: 3000, host: 'localhost' });
@@ -46,20 +48,17 @@ var blinktrade = new BlinkTradeWS({
 blinktrade.connect().then(function () {
   return blinktrade.login({ username: config.key, password: config.password }, function (data) {
     logConsole("Check your username and password");
+    process.exit(1);
   });
 }).then(function (logged) {
-  if (!!logged) {
     console.log("Connected BlinkTradeWS")
     return blinktrade.balance().on('BALANCE', onBalanceUpdate);
-  } else {
-    console.log("Not Connected BlinkTradeWS")
-  }
 
 }).then(function (balance) {
-  variables.infoBalanceBRL.BRL = balance.Available.BRL;
-  variables.infoBalanceBRL.BTC = balance.Available.BTC;
+  variables.infoBalanceBRL.BRL = balance.Available.BRL || 0;
+  variables.infoBalanceBRL.BTC = balance.Available.BTC || 0;
   variables.ClientID = balance.ClientID;
-  logConsole("[" + dateFormat(new Date(), "h:MM:ss") + "] <@Foxbit Balance: " + parseFloat(balance.Available.BRL / 1e8).toFixed(2) + " BRL | " + parseFloat(balance.Available.BTC / 1e8).toFixed(6) + " BTC@>");
+  logConsole("[" + dateFormat(new Date(), "h:MM:ss") + "] <@Foxbit Balance: " + parseFloat((balance.Available.BRL || 0) / 1e8).toFixed(2) + " BRL | " + parseFloat((balance.Available.BTC || 0) / 1e8).toFixed(6) + " BTC@>");
 
 
   blinktrade.executionReport()
