@@ -47,8 +47,11 @@ var blinktrade = new BlinkTradeWS({
 });
 blinktrade.connect().then(function () {
   return blinktrade.login({ username: config.key, password: config.password }, function (data) {
-    logConsole("Check your username and password");
-    process.exit(1);
+    if(!!data && data.UserStatusText === "MSG_LOGIN_ERROR_INVALID_USERNAME_OR_PASSWORD") {
+      logConsole("Check your username and password");
+      process.exit(1);
+    }
+    
   });
 }).then(function (logged) {
     console.log("Connected BlinkTradeWS")
