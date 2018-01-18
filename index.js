@@ -85,7 +85,7 @@ blinktrade.connect().then(function () {
   myorders()
   setInterval(myorders, 2000);
   serverstart()
-}).catch(function(err) {
+}).catch(function (err) {
   console.log(err);
 });;
 
